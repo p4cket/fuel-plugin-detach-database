@@ -7,7 +7,7 @@ $plugin_yaml = "${plugin_name}.yaml"
 
 if $detach_database_plugin {
   $network_metadata = hiera_hash('network_metadata')
-  if ! $network_metadata['vips']['database'] {
+  if ! $network_metadata['vips']['zabbix-database'] {
     fail('Database VIP is not defined')
   }
   $yaml_additional_config = pick($detach_database_plugin['yaml_additional_config'], {})
@@ -22,7 +22,7 @@ if $detach_database_plugin {
 
   $nodes_hash = hiera('nodes')
   $management_vip = hiera('management_vip')
-  $database_vip = pick($settings_hash_real['remote_database'],$network_metadata['vips']['database']['ipaddr'])
+  $database_vip = pick($settings_hash_real['remote_database'],$network_metadata['vips']['zabbix-database']['ipaddr'])
 
   #Set database_nodes values
   $database_roles = [ 'primary-zabbix-database', 'zabbix-database' ]

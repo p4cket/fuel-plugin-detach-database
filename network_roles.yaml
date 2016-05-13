@@ -10,10 +10,10 @@
     # List of VIPs to be allocated
     vip:
          # Unique VIP name
-       - name: "database"
+       - name: "zabbix-database"
          # Optional linux namespace for VIP
          namespace: "haproxy"
-         alias: "database"
+         alias: "zabbix-database"
          node_roles:
            - "primary-zabbix-database"
            - "zabbix-database"
