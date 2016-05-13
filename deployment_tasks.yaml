@@ -7,8 +7,8 @@
   required_for: [deploy_end]
   tasks: [hiera, fuel_pkgs, globals, tools, logging, netconfig,
     hosts, firewall, database-firewall, deploy_start, primary-cluster,
-    database-virtual-ip, primary-cluster-haproxy, openstack-haproxy-stats,
-    primary-database]
+    database-virtual-ip, primary-cluster-haproxy, openstack-haproxy-mysqld,
+    openstack-haproxy-stats, primary-database]
   parameters:
     strategy:
       type: one_by_one
@@ -20,7 +20,8 @@
   required_for: [deploy_end]
   tasks: [hiera, fuel_pkgs, globals, tools, logging, netconfig,
     hosts, firewall, database-firewall, deploy_start, cluster,
-    database-virtual-ip, cluster-haproxy, openstack-haproxy-stats, database]
+    database-virtual-ip, cluster-haproxy, openstack-haproxy-mysqld,
+    openstack-haproxy-stats, database]
   parameters:
     strategy:
       type: parallel
