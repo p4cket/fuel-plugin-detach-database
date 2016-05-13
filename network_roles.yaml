@@ -15,5 +15,5 @@
          namespace: "haproxy"
          alias: "database"
          node_roles:
-           - "primary-standalone-database"
-           - "standalone-database"
+           - "primary-zabbix-database"
+           - "zabbix-database"

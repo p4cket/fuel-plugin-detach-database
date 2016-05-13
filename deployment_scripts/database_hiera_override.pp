@@ -1,8 +1,8 @@
-notice('MODULAR: detach-database/database_hiera_override.pp')
+notice('MODULAR: zabbix-database/database_hiera_override.pp')
 
-$detach_database_plugin = hiera('detach-database', undef)
+$detach_database_plugin = hiera('zabbix-database', undef)
 $hiera_dir = '/etc/hiera/plugins'
-$plugin_name = 'detach-database'
+$plugin_name = 'zabbix-database'
 $plugin_yaml = "${plugin_name}.yaml"
 
 if $detach_database_plugin {
@@ -25,7 +25,7 @@ if $detach_database_plugin {
   $database_vip = pick($settings_hash_real['remote_database'],$network_metadata['vips']['database']['ipaddr'])
 
   #Set database_nodes values
-  $database_roles = [ 'primary-standalone-database', 'standalone-database' ]
+  $database_roles = [ 'primary-zabbix-database', 'zabbix-database' ]
   $database_nodes = get_nodes_hash_by_roles($network_metadata, $database_roles)
   $database_address_map = get_node_to_ipaddr_map_by_network_role($database_nodes, 'mgmt/database')
   $database_nodes_ips = values($database_address_map)
@@ -34,7 +34,7 @@ if $detach_database_plugin {
   ###################
   $roles = join(hiera('roles'), ',')
   case $roles {
-    /primary-standalone-database/: {
+    /primary-zabbix-database/: {
       $primary_database = true
       $primary_controller = true
     }
@@ -48,7 +48,7 @@ if $detach_database_plugin {
     }
   }
   case $roles {
-    /standalone-database/: {
+    /zabbix-database/: {
       $corosync_roles = $database_roles
       $deploy_vrouter = false
       $mysql_enabled = true
