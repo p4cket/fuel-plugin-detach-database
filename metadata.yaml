@@ -1,11 +1,11 @@
 # Plugin name
-name: detach-database
+name: zabbix-database
 # Human-readable name for your plugin
-title: Separate DB from controller
+title: Additional DB for zabbix
 # Plugin version
 version: '4.0.4'
 # Description
-description: Creates separate Database role for deploying
+description: Creates separate Database for zabbix
 # Required fuel version
 fuel_version: ['8.0']
 # Specify license of your plugin
