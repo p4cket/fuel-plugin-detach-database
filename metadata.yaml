@@ -3,7 +3,7 @@ name: zabbix-database
 # Human-readable name for your plugin
 title: Additional DB for zabbix
 # Plugin version
-version: '4.0.4'
+version: '4.0.6'
 # Description
 description: Creates separate Database for zabbix
 # Required fuel version
@@ -17,7 +17,7 @@ homepage: 'https://github.com/stackforge/fuel-plugins'
 # Specify a group which your plugin implements, possible options:
 # network, storage, storage::cinder, storage::glance, hypervisor
 groups: [network]
-is_hotpluggable: true
+is_hotpluggable: false
 
 
 # The plugin is compatible with releases in the list
