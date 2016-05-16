@@ -1,13 +1,13 @@
-notice('MODULAR: detach-database/database_hiera_override.pp')
+notice('MODULAR: zabbix-database/database_hiera_override.pp')
 
-$detach_database_plugin = hiera('detach-database', undef)
+$detach_database_plugin = hiera('zabbix-database', undef)
 $hiera_dir = '/etc/hiera/plugins'
-$plugin_name = 'detach-database'
+$plugin_name = 'zabbix-database'
 $plugin_yaml = "${plugin_name}.yaml"
 
 if $detach_database_plugin {
   $network_metadata = hiera_hash('network_metadata')
-  if ! $network_metadata['vips']['database'] {
+  if ! $network_metadata['vips']['zabbix-database'] {
     fail('Database VIP is not defined')
   }
   $yaml_additional_config = pick($detach_database_plugin['yaml_additional_config'], {})
@@ -22,10 +22,10 @@ if $detach_database_plugin {
 
   $nodes_hash = hiera('nodes')
   $management_vip = hiera('management_vip')
-  $database_vip = pick($settings_hash_real['remote_database'],$network_metadata['vips']['database']['ipaddr'])
+  $database_vip = pick($settings_hash_real['remote_database'],$network_metadata['vips']['zabbix-database']['ipaddr'])
 
   #Set database_nodes values
-  $database_roles = [ 'primary-standalone-database', 'standalone-database' ]
+  $database_roles = [ 'primary-zabbix-database', 'zabbix-database' ]
   $database_nodes = get_nodes_hash_by_roles($network_metadata, $database_roles)
   $database_address_map = get_node_to_ipaddr_map_by_network_role($database_nodes, 'mgmt/database')
   $database_nodes_ips = values($database_address_map)
@@ -33,7 +33,7 @@ if $detach_database_plugin {
 
   ###################
   case hiera('role', 'none') {
-    'primary-standalone-database': {
+    'primary-zabbix-database': {
       $primary_database = true
       $primary_controller = true
     }

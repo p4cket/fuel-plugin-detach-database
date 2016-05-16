@@ -1,25 +1,25 @@
 ##############################################
 # Deployment groups
-- id: primary-standalone-database
+- id: primary-zabbix-database
   type: group
-  role: [primary-standalone-database]
+  role: [primary-zabbix-database]
   requires: [deploy_start]
   required_for: [deploy_end, primary-controller, controller]
   tasks: [hiera, fuel_pkgs, globals, tools, logging, netconfig,
     hosts, firewall, database-firewall, deploy_start, cluster,
-    database-virtual-ip, cluster-haproxy, openstack-haproxy-stats, task-database]
+    database-virtual-ip, cluster-haproxy, openstack-haproxy-mysqld, openstack-haproxy-stats, task-database]
   parameters:
     strategy:
       type: one_by_one
 
-- id: standalone-database
+- id: zabbix-database
   type: group
-  role: [standalone-database]
-  requires: [deploy_start, primary-standalone-database, primary-controller, controller]
+  role: [zabbix-database]
+  requires: [deploy_start, primary-zabbix-database, primary-controller, controller]
   required_for: [deploy_end]
   tasks: [hiera, fuel_pkgs, globals, tools, logging, netconfig,
     hosts, firewall, database-firewall, deploy_start, cluster,
-    database-virtual-ip, cluster-haproxy, openstack-haproxy-stats, task-database]
+    database-virtual-ip, cluster-haproxy, openstack-haproxy-mysqld, openstack-haproxy-stats, task-database]
   parameters:
     strategy:
       type: parallel
@@ -27,9 +27,9 @@
 # Deployment tasks
 - id: database-haproxy
   type: puppet
-  groups: [primary-standalone-database, standalone-database]
+  groups: [primary-zabbix-database, zabbix-database]
   required_for: [task-database, deploy_end]
-  requires: [deploy_start, database-virtual-ip, cluster-haproxy,
+  requires: [deploy_start, database-virtual-ip, cluster-haproxy, openstack-haproxy-mysqld,
     openstack-haproxy-stats]
   parameters:
     puppet_manifest: "database-haproxy.pp"
@@ -38,7 +38,7 @@
 
 - id: database-virtual-ip
   type: puppet
-  groups: [primary-standalone-database, standalone-database]
+  groups: [primary-zabbix-database, zabbix-database]
   required_for: [deploy_end]
   requires: [database-firewall, cluster]
   parameters:
@@ -48,7 +48,7 @@
 
 - id: task-database
   type: puppet
-  role: [primary-standalone-database, standalone-database]
+  role: [primary-zabbix-database, zabbix-database]
   requires: [hosts, database-firewall, cluster, database-haproxy,
     database-virtual-ip]
   parameters:
@@ -62,9 +62,7 @@
 
 - id: database-hiera-override
   type: puppet
-  groups: [primary-controller, controller, primary-standalone-database,
-    standalone-database, cinder, cinder-vmware, compute, ceph-osd,
-    primary-mongo, mongo]
+  groups: [primary-zabbix-database, zabbix-database]
   requires: [globals]
   required_for: [logging]
   parameters:
@@ -74,7 +72,7 @@
 
 - id: database-firewall
   type: puppet
-  role: [primary-standalone-database, standalone-database]
+  role: [primary-zabbix-database, zabbix-database]
   requires: [globals, firewall]
   required_for: [cluster, task-database]
   parameters:

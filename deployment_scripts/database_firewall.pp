@@ -1,4 +1,4 @@
-notice('MODULAR: detach-database/database_firewall.pp')
+notice('MODULAR: zabbix-database/database_firewall.pp')
 
 $network_scheme   = hiera_hash('network_scheme')
 $network_metadata = hiera_hash('network_metadata')
